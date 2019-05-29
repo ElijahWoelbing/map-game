@@ -8,7 +8,6 @@ canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 let image = new Image();
 image.src = "states.png";
-let numberOfStates = 2;
 let activeState;
 let states = [{name:"alaska", x:132, y:651, size:40},
               {name:"Alabama", x:810, y:544, size:40},
@@ -16,18 +15,18 @@ let states = [{name:"alaska", x:132, y:651, size:40},
               {name:"Arizona", x:241, y:471, size:40},
               {name:"California", x:80, y:384, size:40},
               {name:"Colorado", x:374, y:361, size:40},
-              {name:"Connecticut", x:1066, y:239, size:20},
+              {name:"Connecticut", x:1066, y:235, size:15},
               {name:"Delaware", x:1036, y:336, size:10},
-              {name:"Florida", x:956, y:674, size:40},
+              {name:"Florida", x:945, y:674, size:30},
               {name:"Georgia", x:891, y:545, size:40},
-              {name:"Hawaii", x:417, y:767, size:10},
+              {name:"Hawaii", x:410, y:760, size:10},
               {name:"Iowa", x:641, y:279, size:40},
               {name:"Idaho", x:230, y:194, size:40},
-              {name:"Illinois", x:741, y:341, size:40},
-              {name:"Indiana", x:806, y:335, size:30},
+              {name:"Illinois", x:730, y:341, size:40},
+              {name:"Indiana", x:790, y:335, size:30},
               {name:"Kansas", x:528, y:370, size:40},
               {name:"Kentucky", x:846, y:389, size:30},
-              {name:"Louisiana", x:674, y:572, size:40},
+              {name:"Louisiana", x:670, y:572, size:30},
               {name:"Massachusetts", x:1071, y:211, size:10},
               {name:"Maryland", x:1029, y:347, size:10},
               {name:"Maine", x:1109, y:96, size:20},
@@ -66,49 +65,48 @@ let states = [{name:"alaska", x:132, y:651, size:40},
 function draw(){
     ctx.drawImage(image, 0, 0, canvasWidth, canvasHeight);
     for(i=0; i < states.length; i++){
-      ctx.fillRect(states[i].x,states[i].y,states[i].size,states[i].size);
+      ctx.strokeRect(states[i].x,states[i].y,states[i].size,states[i].size);
     }
+    setState();
 }
 
 window.onload = draw;
 
 
 function setState(){
-
 const randomNum = Math.floor(Math.random() * (states.length - 0 )) + 0
 activeState = states[randomNum];
 stateOutPut.innerText = `click on: ${activeState.name}`;
 }
-setState();
+
 
 function checkCoords(event) {
   const rect = canvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
-  const coords = "X coords: " + x + ", Y coords: " + y;
-  console.log(coords);
   
   if(x > activeState.x && x < activeState.x + 40 && y > activeState.y && y < activeState.y + 40){
-results.innerHTML = "correct";
-ctx.fillStyle = "green";
-ctx.fillRect(activeState.x,activeState.y,activeState.size,activeState.size);
+    results.innerHTML = "correct";
+    ctx.fillStyle = "green";
+    ctx.fillRect(activeState.x,activeState.y,activeState.size,activeState.size);
   } else {
     ctx.fillStyle = "red";
     ctx.fillRect(activeState.x,activeState.y,activeState.size,activeState.size);
     results.innerHTML = "incorrect";
   }
- setState();
+  removeState();
+  setState();
+
 }
 canvas.onclick = checkCoords;
 
 
-// function removeState(){
-// console.log(test.length);
-// let toRemove = test.indexOf(activeState);
-// test.slice(toRemove);
-// numberOfStates -= 1;
+function removeState(){
+  if(states.length > 1){
+    let toRemove = states.indexOf(activeState);
+    states.splice(toRemove,1);
+  } else{
+    results.innerText = "Game Over"
+  }
 
-// // console.log(toRemove);
-
-
-// }
+}
